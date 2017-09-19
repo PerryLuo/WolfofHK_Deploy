@@ -254,14 +254,14 @@ var callExcService = (function () {
         this.http = http;
     }
     callExcService.prototype.callExchangeInfo = function () {
-        return this.http.get('/callExchangeInfo');
+        return this.http.get('/api/callExchangeInfo');
     };
     callExcService.prototype.sendExchangeTrade = function (value, event) {
         if (event === 'buy') {
-            return this.http.post('/sendExchangeTradeBuy', value);
+            return this.http.post('/api/sendExchangeTradeBuy', value);
         }
         if (event === 'sell') {
-            return this.http.post('/sendExchangeTradeSell', value);
+            return this.http.post('/api/sendExchangeTradeSell', value);
         }
     };
     return callExcService;
