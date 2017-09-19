@@ -23,7 +23,7 @@ bittrex.options({
 //         }
 //     });
 // }
-
+console.log(password.apikey)
 function getWallet(callback){
     bittrex.getbalances( function( data, err ) {
         if (err) {
