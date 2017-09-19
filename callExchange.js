@@ -1,9 +1,10 @@
 const bittrex = require('node.bittrex.api');
 const axios = require('axios')
+const password = require('./password.json')
 
 bittrex.options({
-  'apikey' : '50d97e836cb24d079d647fcf4ac731b5',
-  'apisecret' : 'ebbc20b61ad9484291358b2a62e9634c', 
+  'apikey' : password.apikey,
+  'apisecret' : password.apisecret, 
 });
 
 // function getMarketSummary(callback){
@@ -33,14 +34,12 @@ function getWallet(callback){
       });
 } 
 
-// var apikey = '50d97e836cb24d079d647fcf4ac731b5'
-// var apikey = '123'
 function buyLimit(buyOrderInfo){
     var buyTradePair = buyOrderInfo.tradePair
     var buyQuantity = buyOrderInfo.quantity
     var buyPrice = buyOrderInfo.priceLimit
 
-    return axios.get('https://bittrex.com/api/v1.1/market/buylimit?apikey='+apikey+'&market='+buyTradePair+'&quantity='+buyQuantity+'&rate='+buyPrice)
+    return axios.get('https://bittrex.com/api/v1.1/market/buylimit?apikey='+password.apikey+'&market='+buyTradePair+'&quantity='+buyQuantity+'&rate='+buyPrice)
 } 
 
 function sellLimit(sellOrderInfo){
@@ -48,7 +47,7 @@ function sellLimit(sellOrderInfo){
     var sellQuantity = sellOrderInfo.quantity
     var sellPrice = sellOrderInfo.priceLimit
 
-   return axios.get('https://bittrex.com/api/v1.1/market/selllimit?apikey='+apikey+'&market='+sellTradePair+'&quantity='+sellQuantity+'&rate='+sellPrice)
+   return axios.get('https://bittrex.com/api/v1.1/market/selllimit?apikey='+password.apikey+'&market='+sellTradePair+'&quantity='+sellQuantity+'&rate='+sellPrice)
 } 
 
 // module.exports.getMarketSummary=getMarketSummary
