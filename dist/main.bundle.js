@@ -253,8 +253,8 @@ var callExcService = (function () {
     function callExcService(http) {
         this.http = http;
     }
-    callExcService.prototype.callExchangeInfo = function () {
-        return this.http.get('/api/callExchangeInfo');
+    callExcService.prototype.callExchangeInfo = function (apikey, apisecret) {
+        return this.http.get("http://localhost:8080/api/callExchangeInfo?key=" + apikey + "&secret=" + apisecret);
     };
     callExcService.prototype.sendExchangeTrade = function (value, event) {
         if (event === 'buy') {
@@ -567,7 +567,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/status/status.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"wrapper\">\n  <h3>Bittrex - Wallet Balance</h3>\n  <h4 *ngFor=\"let info of walletInfo\">\n      <hr>\n      <div class=\"label\">\n          Currency:\n          <span class=\"value\">{{info.Currency}}</span>\n     </div>\n     <div class=\"label\">\n         Total Balance:\n         <span class=\"value\">{{info.Balance}}</span>\n     </div>\n     <div class=\"label\">\n         Available:\n         <span class=\"value\">{{info.Available}}</span>\n     </div>\n     <div class=\"label\">\n        Pending:\n        <span class=\"value\">{{info.Pending}}</span>\n    </div>\n  </h4>\n</div> \n  <!-- <h5>Purchase Cost</h5>\n  <h5>Market Value</h5>\n  <h5>Percentage Change</h5> -->\n\n"
+module.exports = "<div class=\"wrapper\">\n  <h3>Bittrex - Wallet Balance</h3>\n  <form *ngIf=\"walletInfo.length==0\" #ApiForm=ngForm>\n    <div class='form-group'>\n        <label>API Key:</label>\n        <input type='password' class=\"form-control\" name=\"APIkey\" ngModel>\n    </div>\n    <div class='form-group'>\n        <label>API Secret:</label>\n        <input type='password' class=\"form-control\" name=\"APIsecret\" ngModel>\n    </div>\n    <button  class=\"btn btn-danger btn-md\" (click)='onSubmit(ApiForm.value)'>Submit</button>\n  </form>\n  <h4 *ngIf=\"walletInfo.length==0\" style=\"color:red\">{{walletInfoErrorMsg}}</h4>\n  <div>\n    <h4 *ngFor=\"let info of walletInfo\">\n        <hr>\n        <div class=\"label\">\n            Currency:\n            <span class=\"value\">{{info.Currency}}</span>\n        </div>\n        <div class=\"label\">\n            Total Balance:\n            <span class=\"value\">{{info.Balance}}</span>\n        </div>\n        <div class=\"label\">\n            Available:\n            <span class=\"value\">{{info.Available}}</span>\n        </div>\n        <div class=\"label\">\n            Pending:\n            <span class=\"value\">{{info.Pending}}</span>\n        </div>\n    </h4>\n   </div>\n</div> \n  <!-- <h5>Purchase Cost</h5>\n  <h5>Market Value</h5>\n  <h5>Percentage Change</h5> -->\n\n"
 
 /***/ }),
 
@@ -593,13 +593,24 @@ var StatusComponent = (function () {
     function StatusComponent(callExchangeService) {
         this.callExchangeService = callExchangeService;
         this.walletInfo = [];
+        this.walletInfoErrorMsg = '';
     }
     StatusComponent.prototype.ngOnInit = function () {
+    };
+    StatusComponent.prototype.onSubmit = function (value) {
         var _this = this;
-        this.callExchangeService.callExchangeInfo()
+        // console.log(value)
+        this.callExchangeService.callExchangeInfo(value.APIkey, value.APIsecret)
             .subscribe(function (walletData) {
             console.log(walletData.json());
-            _this.walletInfo = walletData.json();
+            if (walletData.json().success) {
+                _this.walletInfo = walletData.json().result;
+            }
+            else if (walletData.json().success == false) {
+                // console.log("APIKEY or APISECRET INVALID")
+                _this.walletInfoErrorMsg = "APIKEY or APISECRET INVALID";
+                console.log(_this.walletInfoErrorMsg);
+            }
         });
     };
     return StatusComponent;

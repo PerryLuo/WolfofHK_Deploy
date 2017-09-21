@@ -8,11 +8,10 @@ module.exports = (express) => {
     const router = express.Router();
 
     router.get('/callExchangeInfo', (req, res) => {
-        // bittrex.getMarketSummary(function(data){
-        //     res.send(data.result)
-        // })
-
-        bittrex.getWallet(function(walletInfo){
+        console.log(req.query)
+        bittrex.getWallet(req.query.key, req.query.secret, function(walletInfo){
+            console.log('wallet info is ')
+            console.log(walletInfo)
             res.send(walletInfo)
         })
     })

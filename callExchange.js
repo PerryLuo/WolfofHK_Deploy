@@ -2,35 +2,20 @@ const bittrex = require('node.bittrex.api');
 const axios = require('axios')
 const password = require('./password.json')
 
-bittrex.options({
-  'apikey' : password.apikey,
-  'apisecret' : password.apisecret, 
-});
-
-// function getMarketSummary(callback){
-//     bittrex.getmarketsummaries( function( data, err ) {
-//         if (err) {
-//             return console.error(err);
-//         }
-    
-//         callback(data)
-    
-//         for( var i in data.result ) {
-//             bittrex.getticker( { market : data.result[i].MarketName }, function( ticker ) {
-//             // console.log('this')
-//             //     console.log(ticker);
-//             });
-//         }
-//     });
-// }
-console.log(password.apikey)
-function getWallet(callback){
+function getWallet(apikey, apisecret, callback){
+    bittrex.options({
+        'apikey' : apikey,
+        'apisecret' : apisecret, 
+      });
     bittrex.getbalances( function( data, err ) {
         if (err) {
-            return console.log(err)
+            callback(err)
         }
-        console.log( data.result );
-        callback(data.result)
+        else if (data.success){
+            console.log("result is")
+            console.log(data);
+            callback(data)
+        }
       });
 } 
 
