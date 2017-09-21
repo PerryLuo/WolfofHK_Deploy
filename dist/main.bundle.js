@@ -254,7 +254,7 @@ var callExcService = (function () {
         this.http = http;
     }
     callExcService.prototype.callExchangeInfo = function (apikey, apisecret) {
-        return this.http.get("http://localhost:8080/api/callExchangeInfo?key=" + apikey + "&secret=" + apisecret);
+        return this.http.get("/api/callExchangeInfo?key=" + apikey + "&secret=" + apisecret);
     };
     callExcService.prototype.sendExchangeTrade = function (value, event) {
         if (event === 'buy') {
